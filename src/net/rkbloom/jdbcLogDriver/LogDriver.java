@@ -62,9 +62,15 @@ public class LogDriver implements Driver {
         if (!acceptsURL(url)) {
             return null;
         }
-        String realUrl = parseUrl(url);
-        log.debug("Trying to find: " + realUrl);
-        return new LogConnection(DriverManager.getConnection(realUrl, info));
+        try {
+            String realUrl = parseUrl(url);
+            log.debug("Trying to find: " + realUrl);
+            return new LogConnection(DriverManager.getConnection(realUrl, info));
+        }
+        catch (ClassNotFoundException e) {
+            throw new SQLException("Couldn't load class for embedded driver: " +
+                                   e.getMessage());
+        }
     }
 
     /**
@@ -75,8 +81,16 @@ public class LogDriver implements Driver {
         return new DriverPropertyInfo[0];
     }
 
-    private String parseUrl(String url) {
-        String newUrl = url.replaceFirst(":log", "");
+    private String parseUrl(String url) throws ClassNotFoundException {
+        // Get the class for the real JDBC driver.
+        int start = url.indexOf(":log:") + ":log:".length();
+        int end = url.indexOf(":", start);
+        String realClass = url.substring(start, end);
+        log.debug("Real JDBC driver Class: " + realClass);
+        Class.forName(realClass);
+        
+        String newUrl = url.replaceFirst(":log:" + realClass, "");
+        log.debug("Real JDBC connection string: " + newUrl);
         return newUrl;
     }
     
