@@ -11,13 +11,17 @@
     <tstamp />
   </target>
 
+  <target name="clean" description="clean all of the code">
+   <delete dir="${build.dir}" />
+  </target>
+
   <target name="compile" depends="init" description="compile the code">
     <mkdir dir="${build.dir}/classes" />
     <javac destdir="${build.dir}/classes"
            optimize="off"
            debug="on"
            nowarn="on"
-           classpathref="alljars" >
+    	   classpathref="alljars">
       <src>
         <path location="src" />
       </src>
@@ -75,7 +79,7 @@
 
   <target name="pack-jar" depends="compile">
     <delete file="${jar.file}" />
-  	<mkdir dir="${build.dir}/run-lib" />
+    <mkdir dir="${build.dir}/run-lib" />
     <jar destfile="${jar.file}">
       <fileset dir="${build.dir}/classes">
         <exclude name="**/test/*" />
