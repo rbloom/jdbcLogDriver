@@ -8,7 +8,9 @@
  * accordance with the terms of the license agreement you entered into
  * with Ryan Bloom.
  */
-package src.net.rkbloom.jdbcLogDriver;
+package net.rkbloom.jdbcLogDriver;
+
+import org.apache.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.Driver;
@@ -23,6 +25,8 @@ import java.util.Properties;
  */
 public class LogDriver implements Driver {
 
+    private static Logger log = Logger.getLogger(LogDriver.class);
+    
     /**
      * {@inheritDoc}
      */
@@ -59,6 +63,7 @@ public class LogDriver implements Driver {
             return null;
         }
         String realUrl = parseUrl(url);
+        log.debug("Trying to find: " + realUrl);
         return new LogConnection(DriverManager.getConnection(realUrl, info));
     }
 
@@ -71,7 +76,16 @@ public class LogDriver implements Driver {
     }
 
     private String parseUrl(String url) {
-        System.out.println("HMMMM: " + url);
-        return url;
+        String newUrl = url.replaceFirst(":log", "");
+        return newUrl;
+    }
+    
+    static {
+        try {
+            DriverManager.registerDriver(new LogDriver());
+        }
+        catch (SQLException e) {
+            log.error("Couldn't register LogDriver.", e);
+        }
     }
 }
