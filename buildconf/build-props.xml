@@ -1,0 +1,48 @@
+<project name="build-props">
+  <property name="jld-home" location="." />
+  <property environment="env" />
+  <property file="${user.home}/.jldendar.properties" />
+  <property name="src.dir" location="${jld-home}/src" />
+  <property name="build.dir" location="${jld-home}/build" />
+  <property name="report.dir" location="${build.dir}/reports" />
+  <property name="testresults.dir" location="${report.dir}/tests" />
+  <property name="build.instrument.dir" location="${build.dir}/instrumented" />
+  <property name="log4j.threshold" value="warn" />
+  <property name="halt-tests-on-failure" value="false" />
+  <property name="checkstyle.header.file" 
+    value="${jld-home}/buildconf/LICENSE.txt" />
+  <property name="lib.dir" value="${jld-home}/build/run-lib" />
+  <property name="jar.file" value="${lib.dir}/jdbcLogDriver.jar">
+  </property>
+  <property name="test.jar.dependencies" 
+    value="antlr checkstyle emma emma_ant gnu.getopt jta junit log4j mockobjects-core mockobjects mockobjects-jdk1.4-j2ee1.3 regexp tyrex dom4j jta" 
+    />
+  <path id="alljars">
+    <path refid="buildjars" />
+    <path refid="runjars" />
+  </path>
+  <path id="runjars">
+    <fileset dir="lib">
+    </fileset>
+  </path>
+  <path id="buildjars">
+    <fileset dir="lib">
+      <include name="*.jar" />
+    </fileset>
+  </path>
+  <path id="runpath">
+    <path refid="alljars" />
+    <pathelement path="${build.dir}/classes" />
+  </path>
+  <path id="testjars">
+    <fileset dir="lib">
+      <include name="checkstyle*.jar" />
+      <include name="junit.jar" />
+    </fileset>
+  </path>
+  <path id="test.runpath">
+    <path refid="alljars" />
+    <path refid="testjars" />
+    <pathelement path="${build.dir}/classes" />
+  </path>
+</project>

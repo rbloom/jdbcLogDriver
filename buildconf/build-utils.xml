@@ -1,0 +1,38 @@
+<project name="build-utils.xml">
+
+  <macrodef name="run-junit">
+    <attribute name="include" />
+    <attribute name="banner" />
+    <attribute name="testbuilddir" />
+    <attribute name="classpathid" />
+    <attribute name="reportdir" />
+
+    <sequential>
+      <mkdir dir="@{reportdir}" />
+      <echo>
+--------------------------------------------------------------------
+Running @{banner} ...
+--------------------------------------------------------------------
+      </echo>
+
+      <!-- forkmode requires using Ant 1.6.2.  If you don't have
+           1.6.2, remove forkmode attribute -->
+      <junit fork="yes" forkmode="once" printsummary="off" showoutput="yes"
+             haltonfailure="${halt-tests-on-failure}" 
+             failureproperty="junit_test_failure" >
+        <sysproperty key="com.jcoverage.rawcoverage.dir" value="${ecal-home}" />
+        <sysproperty key="ecal-home" value="${ecal-home}" />
+        <sysproperty key="log4j.threshold" value="${log4j.threshold}" />
+
+        <classpath refid="@{classpathid}" />
+        <formatter usefile="no" type="plain" />
+        <formatter type="xml" />
+        <batchtest todir="@{reportdir}">
+          <fileset dir="@{testbuilddir}">
+            <include name="@{include}" />
+          </fileset>
+        </batchtest>
+      </junit>
+    </sequential>
+  </macrodef>
+</project>

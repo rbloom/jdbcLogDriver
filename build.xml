@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+
+<project name="jdbcLogDriver" default="all" basedir=".">
+  <import file="buildconf/build-props.xml" />
+  <import file="buildconf/build-utils.xml" />
+
+  <target name="all" depends="init,compile,pack"
+          description="Compile and pack" />
+
+  <target name="init">
+    <tstamp />
+  </target>
+
+  <target name="compile" depends="init" description="compile the code">
+    <mkdir dir="${build.dir}/classes" />
+    <javac destdir="${build.dir}/classes"
+           optimize="off"
+           debug="on"
+           nowarn="on"
+           classpathref="alljars" >
+      <src>
+        <path location="src" />
+      </src>
+    </javac>
+
+    <copy toDir="${build.dir}/classes">
+      <fileset dir="src">
+        <exclude name="**/*.java" />
+      </fileset>
+    </copy>
+  </target>
+
+  <target name="pack" depends="pack-jar"
+  	description="Package everything" />
+
+  <target name="test" description="Run the tests (-Dtestcase)"
+          depends="compile,invoke-tests-testcase,invoke-tests-all">
+    <fail if="junit_test_failure" message="One or more tests failed" />
+  </target>
+
+  <target name="invoke-tests-testcase" if="testcase">
+    <property name="testcaseorsubsystem" value="true" />
+    <run-junit include="**/test/${testcase}.class" banner="${testcase}"
+               testbuilddir="${build.dir}/classes"
+               classpathid="test.runpath" reportdir="${testresults.dir}" />
+  </target>
+
+  <target name="invoke-tests-all" unless="testcaseorsubsystem">
+    <run-junit include="**/test/*Test.class" banner="All tests"
+               testbuilddir="${build.dir}/classes"
+               classpathid="test.runpath" reportdir="${testresults.dir}" />
+  </target>
+
+  <target name="checkstyle" depends="init">
+    <mkdir dir="${report.dir}" />
+    <checkstyle config="buildconf/checkstyle.xml" failOnViolation="true" >
+      <property key="javadoc.method.scope" value="public" />
+      <property key="javadoc.type.scope" value="package" />
+      <property key="javadoc.var.scope" value="package" />
+      <property key="javadoc.lazy" value="${javadoc.lazy}" />
+      <property key="checkstyle.cache.file" value="${checkstyle.cache.src}" />
+      <fileset dir="src" >
+        <include name="**/*.java" />
+        <exclude name="**/test/*.java" />
+        <exclude name="**/playpen/*.java" />
+      </fileset>
+      <classpath>
+          <path refid="buildjars" />
+          <pathelement path="${build.dir}/classes" />
+      </classpath>
+      <formatter type="plain" />
+      <formatter type="xml" toFile="${report.dir}/checkstyle_report.xml" />
+    </checkstyle>
+  </target>
+
+  <target name="pack-jar" depends="compile">
+    <delete file="${jar.file}" />
+  	<mkdir dir="${build.dir}/run-lib" />
+    <jar destfile="${jar.file}">
+      <fileset dir="${build.dir}/classes">
+        <exclude name="**/test/*" />
+        <exclude name="**/testing/**/*" />
+      </fileset>
+    </jar>
+  </target>
+</project>
+
