@@ -17,22 +17,14 @@
   <property name="test.jar.dependencies" 
     value="antlr checkstyle emma emma_ant gnu.getopt jta junit log4j mockobjects-core mockobjects mockobjects-jdk1.4-j2ee1.3 regexp tyrex dom4j jta" 
     />
-  <path id="alljars">
-    <path refid="buildjars" />
-    <path refid="runjars" />
-  </path>
-  <path id="runjars">
-    <fileset dir="lib">
-    </fileset>
-  </path>
-  <path id="buildjars">
-    <fileset dir="lib">
-      <include name="*.jar" />
-    </fileset>
-  </path>
   <path id="runpath">
-    <path refid="alljars" />
     <pathelement path="${build.dir}/classes" />
+    <path refid="alljars" />
+  </path>
+  <path id="alljars">
+    <fileset dir="lib">
+      <include name="log4j*.jar" />
+    </fileset>
   </path>
   <path id="testjars">
     <fileset dir="lib">

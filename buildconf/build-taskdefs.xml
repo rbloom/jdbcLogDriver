@@ -1,7 +1,0 @@
-<project name="build-taskdefs" default="init-taskdefs">
-  <target name="init-taskdefs" unless="init-taskdefs.notrequired">
-
-    <property name="init-taskdefs.notrequired" value="true" />    
-  </target>
-  
-</project>
