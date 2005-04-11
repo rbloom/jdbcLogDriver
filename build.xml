@@ -87,6 +87,5 @@
       </fileset>
     </jar>
   </target>
-  <!-- testing -->
 </project>
 
