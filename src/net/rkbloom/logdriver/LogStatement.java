@@ -8,7 +8,7 @@
  * accordance with the terms of the license agreement you entered into
  * with Ryan Bloom.
  */
-package net.rkbloom.jdbcLogDriver;
+package net.rkbloom.logdriver;
 
 import org.apache.log4j.Logger;
 
