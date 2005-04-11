@@ -1,0 +1,41 @@
+Basically, you just have to replace your jdbc connection
+string with:
+
+jdbc:log:real_driver_class:real_jdbc_connection_string
+
+So, if your jdbc connection string was:
+
+jdbc:oracle:thin:@localhost:1521:FOOBAR
+it would become:
+jdbc:log:com.oracle.jdbc.OracleDriver:oracle:thin:@localhost:1521:FOOBAR
+
+or something like that.  Once you have done that, you can use log4j to
+log anything you want to know from your jdbc driver.  Currently I am
+logging basic connection operations, statement execution, and
+preparedStatement execution (with bind parameters).  There are two
+ways to log the bind parameters.  The first is the default:
+
+DEBUG [main] (LogPreparedStatement.java:64) - executing
+PreparedStatement: 'select * from ECAL_USER where login like ?' with
+bind parameters: {1=%rbb%}
+
+(The %s are a part of the string)  Notice that I have left the ?s in
+the sql statement, and I let you do the substitution.  The second
+option requires you to set a System property, replace.bindParams, to
+either true or 1.  That logs:
+
+DEBUG [main] (LogPreparedStatement.java:73) - executing PreparedStatement: selec
+t * from ECAL_USER where login like %rbb%
+
+In this case, the bind parameters are in the string.  I am still very
+clear that I am logging the PreparedStatement though.
+
+This jdbc driver basically replaces Hibernate's showSQL option and it
+is more informative than that option, so I am pretty happy with it.  I
+can easily add more logging, and expect to add logging for stored
+procedures very very soon (like tomorrow).  Play around with it, and
+let me know what you think.  If I find it useful, I am likely to use
+this driver as an article topic.
+
+I'll be adding viewcvs to the server soon, so that you can browse the
+source that way, and I'll most likely add some real docs too.
