@@ -1,4 +1,5 @@
 <?xml version="1.0"?>
+<!-- Testing -->
 
 <project name="jdbcLogDriver" default="all" basedir=".">
   <import file="buildconf/build-props.xml" />
