@@ -89,6 +89,7 @@ public class LogPreparedStatement implements PreparedStatement {
      * {@inheritDoc}
      */
     public void addBatch() throws SQLException {
+        logStatement();
         embedded.addBatch();
     }
 
