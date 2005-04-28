@@ -31,7 +31,7 @@ import java.sql.SQLWarning;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Calendar;
-import java.util.HashMap;
+import java.util.TreeMap;
 import java.util.Map;
 
 /**
@@ -50,7 +50,10 @@ public class LogPreparedStatement implements PreparedStatement {
         embedded = ps;
         conn = c;
         sql = s;
-        bindParams = new HashMap();
+        // we want to have the bind parameters print out in order
+        // otherwise it is difficult to match the parameters with
+        // the question marks (?) in the query.
+        bindParams = new TreeMap();
     }
     
     // This looks useless, but it isn't.  I have centralized the logging in
