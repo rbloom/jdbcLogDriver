@@ -12,7 +12,7 @@
   <property name="checkstyle.header.file" 
     value="${jld-home}/buildconf/LICENSE.txt" />
   <property name="lib.dir" value="${jld-home}/build/run-lib" />
-  <property name="jar.file" value="${lib.dir}/jdbcLogDriver.jar">
+  <property name="jar.file" value="${lib.dir}/logdriver.jar">
   </property>
   <property name="test.jar.dependencies" 
     value="antlr checkstyle emma emma_ant gnu.getopt jta junit log4j mockobjects-core mockobjects mockobjects-jdk1.4-j2ee1.3 regexp tyrex dom4j jta" 
