@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<project name="jdbcLogDriver" default="all" basedir=".">
+<project name="logdriver" default="all" basedir=".">
   <import file="buildconf/build-props.xml" />
   <import file="buildconf/build-utils.xml" />
 
@@ -105,5 +105,18 @@
       </zipfileset>
     </zip>
   </target>
+
+  <target name="javadoc" description="Generate the java-doc">
+    <javadoc destdir="${report.dir}/javadoc" author="true" version="true"
+             source="1.4"
+             use="true" failonerror="true" classpathref="alljars"
+             breakiterator="yes" >
+      <fileset dir="src" >
+        <include name="**/*.java" />
+        <exclude name="**/test/**" />
+      </fileset>
+    </javadoc>
+  </target>
+
 </project>
 
