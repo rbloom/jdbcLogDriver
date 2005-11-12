@@ -103,6 +103,9 @@
       <zipfileset dir="${jld-home}/buildconf" prefix="${ant.project.name}/buildconf">
         <exclude name="**/.svn/*" />
       </zipfileset>
+      <zipfileset dir="${jld-home}/doc" prefix="${ant.project.name}/doc">
+        <exclude name="**/.svn/*" />
+      </zipfileset>
     </zip>
   </target>
 
