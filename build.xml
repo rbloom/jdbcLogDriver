@@ -87,5 +87,22 @@
       </fileset>
     </jar>
   </target>
+
+  <target name="pack-src" depends="compile">
+    <delete file="${zip.file}" />
+    <mkdir dir="${dist.dir}" />
+    <zip destfile="${dist.dir}/src.zip">
+      <zipfileset dir="${jld-home}" includes="build.xml" prefix="${ant.project.name}" />
+      <zipfileset dir="${jld-home}/src" prefix="${ant.project.name}/src">
+        <exclude name="**/.svn/*" />
+      </zipfileset>
+      <zipfileset dir="${jld-home}/lib" prefix="${ant.project.name}/lib">
+        <exclude name="**/.svn/*" />
+      </zipfileset>
+      <zipfileset dir="${jld-home}/buildconf" prefix="${ant.project.name}/buildconf">
+        <exclude name="**/.svn/*" />
+      </zipfileset>
+    </zip>
+  </target>
 </project>
 

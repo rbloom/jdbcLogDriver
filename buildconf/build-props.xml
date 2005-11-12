@@ -5,6 +5,7 @@
   <property name="src.dir" location="${jld-home}/src" />
   <property name="build.dir" location="${jld-home}/build" />
   <property name="report.dir" location="${build.dir}/reports" />
+  <property name="dist.dir" location="${jld-home}/dist" />
   <property name="testresults.dir" location="${report.dir}/tests" />
   <property name="build.instrument.dir" location="${build.dir}/instrumented" />
   <property name="log4j.threshold" value="warn" />
