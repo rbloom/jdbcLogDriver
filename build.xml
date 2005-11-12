@@ -13,6 +13,7 @@
 
   <target name="clean" description="clean all of the code">
    <delete dir="${build.dir}" />
+   <delete dir="${dist.dir}" />
   </target>
 
   <target name="compile" depends="init" description="compile the code">
@@ -34,7 +35,7 @@
     </copy>
   </target>
 
-  <target name="pack" depends="pack-jar"
+  <target name="pack" depends="pack-jar,pack-src"
   	description="Package everything" />
 
   <target name="test" description="Run the tests (-Dtestcase)"
