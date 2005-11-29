@@ -35,7 +35,7 @@
     </copy>
   </target>
 
-  <target name="pack" depends="pack-jar,pack-src"
+  <target name="pack" depends="pack-jar"
   	description="Package everything" />
 
   <target name="test" description="Run the tests (-Dtestcase)"
@@ -94,6 +94,7 @@
     <mkdir dir="${dist.dir}" />
     <zip destfile="${dist.dir}/src.zip">
       <zipfileset dir="${jld-home}" includes="build.xml" prefix="${ant.project.name}" />
+      <zipfileset dir="${jld-home}" includes="LICENSE-2.0" prefix="${ant.project.name}" />
       <zipfileset dir="${jld-home}/src" prefix="${ant.project.name}/src">
         <exclude name="**/.svn/*" />
       </zipfileset>
