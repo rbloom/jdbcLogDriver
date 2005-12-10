@@ -240,7 +240,7 @@ public class LogConnection implements Connection {
      * {@inheritDoc}
      */
     public CallableStatement prepareCall(String sql) throws SQLException {
-        return embedded.prepareCall(sql);
+        return new LogCallableStatement(embedded.prepareCall(sql), this, sql);
     }
 
     /**
@@ -248,7 +248,9 @@ public class LogConnection implements Connection {
      */
     public CallableStatement prepareCall(String sql, int resultSetType,
             int resultSetConcurrency) throws SQLException {
-        return embedded.prepareCall(sql, resultSetType, resultSetConcurrency);
+        return new LogCallableStatement(
+                embedded.prepareCall(sql, resultSetType,
+                        resultSetConcurrency), this, sql);
     }
 
     /**
@@ -257,8 +259,9 @@ public class LogConnection implements Connection {
     public CallableStatement prepareCall(String sql, int resultSetType,
             int resultSetConcurrency, int resultSetHoldability)
         throws SQLException {
-        return embedded.prepareCall(sql, resultSetType, resultSetConcurrency,
-                                    resultSetHoldability);
+        return new LogCallableStatement(
+                embedded.prepareCall(sql, resultSetType, resultSetConcurrency,
+                     resultSetHoldability), this, sql);
     }
 
     /**
