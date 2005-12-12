@@ -569,6 +569,7 @@ public class LogCallableStatement implements CallableStatement {
      */
     public void setObject(int parameterIndex, Object x, int targetSqlType, int scale) throws SQLException {
         embedded.setObject(parameterIndex, x, targetSqlType, scale);
+        bindParams.put(new Integer(parameterIndex), x);
     }
 
     /**
@@ -576,6 +577,7 @@ public class LogCallableStatement implements CallableStatement {
      */
     public void setObject(int parameterIndex, Object x, int targetSqlType) throws SQLException {
         embedded.setObject(parameterIndex, x, targetSqlType);
+        bindParams.put(new Integer(parameterIndex), x);
     }
 
     /**
@@ -583,6 +585,7 @@ public class LogCallableStatement implements CallableStatement {
      */
     public void setObject(int parameterIndex, Object x) throws SQLException {
         embedded.setObject(parameterIndex, x);
+        bindParams.put(new Integer(parameterIndex), x);
     }
 
     /**
@@ -597,6 +600,7 @@ public class LogCallableStatement implements CallableStatement {
      */
     public void setRef(int i, Ref x) throws SQLException {
         embedded.setRef(i, x);
+        bindParams.put(new Integer(i), x);
     }
 
     /**
@@ -604,6 +608,7 @@ public class LogCallableStatement implements CallableStatement {
      */
     public void setShort(int parameterIndex, short x) throws SQLException {
         embedded.setShort(parameterIndex, x);
+        bindParams.put(new Integer(parameterIndex), new Short(x));
     }
 
     /**
@@ -611,6 +616,7 @@ public class LogCallableStatement implements CallableStatement {
      */
     public void setString(int parameterIndex, String x) throws SQLException {
         embedded.setString(parameterIndex, x);
+        bindParams.put(new Integer(parameterIndex), x);
     }
 
     /**
@@ -618,6 +624,7 @@ public class LogCallableStatement implements CallableStatement {
      */
     public void setTime(int parameterIndex, Time x, Calendar cal) throws SQLException {
         embedded.setTime(parameterIndex, x, cal);
+        bindParams.put(new Integer(parameterIndex), x);
     }
 
     /**
@@ -625,6 +632,7 @@ public class LogCallableStatement implements CallableStatement {
      */
     public void setTime(int parameterIndex, Time x) throws SQLException {
         embedded.setTime(parameterIndex, x);
+        bindParams.put(new Integer(parameterIndex), x);
     }
 
     /**
@@ -632,6 +640,7 @@ public class LogCallableStatement implements CallableStatement {
      */
     public void setTimestamp(int parameterIndex, Timestamp x, Calendar cal) throws SQLException {
         embedded.setTimestamp(parameterIndex, x, cal);
+        bindParams.put(new Integer(parameterIndex), x);
     }
 
     /**
@@ -639,6 +648,7 @@ public class LogCallableStatement implements CallableStatement {
      */
     public void setTimestamp(int parameterIndex, Timestamp x) throws SQLException {
         embedded.setTimestamp(parameterIndex, x);
+        bindParams.put(new Integer(parameterIndex), x);
     }
 
     /**
@@ -646,6 +656,7 @@ public class LogCallableStatement implements CallableStatement {
      */
     public void setUnicodeStream(int parameterIndex, InputStream x, int length) throws SQLException {
         embedded.setUnicodeStream(parameterIndex, x, length);
+        bindParams.put(new Integer(parameterIndex), x);
     }
 
     /**
@@ -653,6 +664,7 @@ public class LogCallableStatement implements CallableStatement {
      */
     public void setURL(int parameterIndex, URL x) throws SQLException {
         embedded.setURL(parameterIndex, x);
+        bindParams.put(new Integer(parameterIndex), x);
     }
 
     // Prepared Statement methods
@@ -898,6 +910,7 @@ public class LogCallableStatement implements CallableStatement {
      */
     public void setURL(String parameterName, URL val) throws SQLException {
         embedded.setURL(parameterName, val);
+        bindParams.put(parameterName, val);
     }
 
     /**
@@ -906,6 +919,7 @@ public class LogCallableStatement implements CallableStatement {
     public void setNull(String parameterName, int sqlType)
         throws SQLException {
         embedded.setNull(parameterName, sqlType);
+        bindParams.put(parameterName, null);
     }
 
     /**
@@ -914,6 +928,7 @@ public class LogCallableStatement implements CallableStatement {
     public void setBoolean(String parameterName, boolean x)
         throws SQLException {
         embedded.setBoolean(parameterName, x);
+        bindParams.put(parameterName, new Boolean(x));
     }
 
     /**
