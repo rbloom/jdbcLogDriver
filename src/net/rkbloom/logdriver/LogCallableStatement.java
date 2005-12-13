@@ -78,11 +78,11 @@ public class LogCallableStatement implements CallableStatement {
                 logStr = logStr.replaceFirst("\\?", 
                                     bindParams.get(new Integer(i)).toString());
             }
-            log.debug("executing PreparedStatement: " + logStr);
+            log.debug("executing CallableStatement: " + logStr);
             return;
         }
         
-        log.debug("executing PreparedStatement: '" + sql + "' with bind " +
+        log.debug("executing CallableStatement: '" + sql + "' with bind " +
                   "parameters: " + bindParams + " out parameters: " + outParams);    
     }
     
