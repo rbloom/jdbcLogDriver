@@ -1,0 +1,18 @@
+Add a LogDataSource class.  This allows the jdbcLogDriver to be
+used with the DataSource implementation instead of the 
+DriverManager.
+[Chris Wareham]
+
+Fix a bug with printing when "replace.bindParams" equals 1.  
+We weren't incrementing the count variable, so we were always
+printing the same parameter.
+[Vašata Ondrej]
+
+Add logging to CallableStatement
+[Jesus Rodriguez]
+
+Rename package
+[Jesus Rodriguez]
+
+Initial implementation
+[Ryan Bloom]
