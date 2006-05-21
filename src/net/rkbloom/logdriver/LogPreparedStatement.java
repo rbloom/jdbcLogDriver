@@ -75,7 +75,7 @@ public class LogPreparedStatement implements PreparedStatement {
             int i = 1;
             while (logStr.indexOf('?') >= 0) {
                 logStr = logStr.replaceFirst("\\?", 
-                                    bindParams.get(new Integer(i)).toString());
+                                    bindParams.get(new Integer(i++)).toString());
             }
             log.debug("executing PreparedStatement: " + logStr);
             return;

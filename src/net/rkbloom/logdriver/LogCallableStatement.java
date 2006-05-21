@@ -80,7 +80,7 @@ public class LogCallableStatement implements CallableStatement {
             int i = 1;
             while (logStr.indexOf('?') >= 0) {
                 logStr = logStr.replaceFirst("\\?", 
-                                    bindParams.get(new Integer(i)).toString());
+                                    bindParams.get(new Integer(i++)).toString());
             }
             log.debug("executing CallableStatement: " + logStr);
             return;
