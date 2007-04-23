@@ -71,19 +71,50 @@ public class LogPreparedStatement implements PreparedStatement {
         String replaceBind = System.getProperty("replace.bindParams", "0");
         
         if (replaceBind.equals("1") || replaceBind.equals("true")) {
-            String logStr = sql;
-            int i = 1;
-            while (logStr.indexOf('?') >= 0) {
-                logStr = logStr.replaceFirst("\\?", 
-                                    bindParams.get(new Integer(i++)).toString());
-            }
-            log.debug("executing PreparedStatement: " + logStr);
+        	String logStr = this.bindParamsToSql(sql, this.bindParams);
+        	log.debug("executing PreparedStatement: " + logStr);
             return;
         }
         log.debug("executing PreparedStatement: '" + sql + "' with bind " +
                   "parameters: " + bindParams);    
     }
 
+    /**
+     * Replaces bind parameters of an SQL query
+     *  
+     * @param strSQL SQL query containing ?'s wherever a bind param should be
+     * @param mapBindParams one-based index of bind parameters
+     * @return SQL statement containing bind parameters 
+     */
+	private String bindParamsToSql(String strSQL, Map<Integer,Object> mapBindParams)
+	{
+		String[] astrSQL;
+		StringBuilder oLogLineBuilder = new StringBuilder();
+		
+		// sanity check
+		if ( strSQL == null || mapBindParams == null )
+			return strSQL;
+	
+		// split the sql around the ?'s
+		astrSQL = strSQL.split("\\?");
+		
+		// add the split chunks of SQL to oLogLineBuilder, separated by data from mapBindParams
+		int i = 1;
+		for ( String strChunk : astrSQL )
+		{
+			oLogLineBuilder.append(strChunk);
+			if ( mapBindParams.containsKey(i) )
+				oLogLineBuilder.append(
+					mapBindParams.get(i) != null ?
+						mapBindParams.get(i).toString() :
+						"NULL"
+					);
+			i++;
+		}
+		
+		return oLogLineBuilder.toString();
+	}
+    
     /**
      * {@inheritDoc}
      */
