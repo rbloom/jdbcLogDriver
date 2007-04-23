@@ -1,3 +1,8 @@
+Fix an infinite loop if the user specifies to insert the bind
+parameters into the prepared statement and one of the replacement
+values included a '?' character.
+[Andrew Prendergast]
+
 Add a LogDataSource class.  This allows the jdbcLogDriver to be
 used with the DataSource implementation instead of the 
 DriverManager.
