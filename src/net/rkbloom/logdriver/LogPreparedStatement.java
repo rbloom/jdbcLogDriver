@@ -42,7 +42,9 @@ import java.util.TreeMap;
 import java.util.Map;
 
 /**
- * LogPreparedStatement
+ * LogPreparedStatement is a wrapper class around the JDBC PreparedStatement.
+ * It will log the SQL statements being executed, then forward the calls to the
+ * embedded JDBC PreparedStatement.
  * @version $Rev$
  */
 public class LogPreparedStatement implements PreparedStatement {
@@ -50,7 +52,7 @@ public class LogPreparedStatement implements PreparedStatement {
     private PreparedStatement embedded;
     private Connection conn;
     private String sql;
-    private Map bindParams;
+    private Map<Integer, Object> bindParams;
     private static Logger log = Logger.getLogger(LogPreparedStatement.class);
     
     LogPreparedStatement(PreparedStatement ps, Connection c, String s) {
@@ -60,7 +62,7 @@ public class LogPreparedStatement implements PreparedStatement {
         // we want to have the bind parameters print out in order
         // otherwise it is difficult to match the parameters with
         // the question marks (?) in the query.
-        bindParams = new TreeMap();
+        bindParams = new TreeMap<Integer, Object>();
     }
     
     // This looks useless, but it isn't.  I have centralized the logging in
@@ -244,6 +246,7 @@ public class LogPreparedStatement implements PreparedStatement {
 
     /**
      * {@inheritDoc}
+     * @deprecated
      */
     public void setUnicodeStream(int i, InputStream x, int length)
         throws SQLException {
@@ -700,141 +703,111 @@ public class LogPreparedStatement implements PreparedStatement {
     }
 
     public boolean isClosed() throws SQLException {
-        // TODO Auto-generated method stub
-        return false;
+        return embedded.isClosed();
     }
 
     public void setPoolable(boolean poolable) throws SQLException {
-        // TODO Auto-generated method stub
-        
+        embedded.setPoolable(poolable);
     }
 
     public boolean isPoolable() throws SQLException {
-        // TODO Auto-generated method stub
-        return false;
+        return embedded.isPoolable();
     }
 
     public void closeOnCompletion() throws SQLException {
-        // TODO Auto-generated method stub
-        
+        embedded.closeOnCompletion();
     }
 
     public boolean isCloseOnCompletion() throws SQLException {
-        // TODO Auto-generated method stub
-        return false;
+        return embedded.isCloseOnCompletion();
     }
 
     public <T> T unwrap(Class<T> iface) throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+        return embedded.unwrap(iface);
     }
 
     public boolean isWrapperFor(Class<?> iface) throws SQLException {
-        // TODO Auto-generated method stub
-        return false;
+        return embedded.isWrapperFor(iface);
     }
 
     public void setRowId(int i, RowId x) throws SQLException {
-        // TODO Auto-generated method stub
-        
+        embedded.setRowId(i, x);
     }
 
     public void setNString(int i, String value)
         throws SQLException {
-        // TODO Auto-generated method stub
-        
+        embedded.setNString(i, value);
     }
 
-    public void setNCharacterStream(int i, Reader value,
-            long length) throws SQLException {
-        // TODO Auto-generated method stub
-        
+    public void setNCharacterStream(int i, Reader reader, long length)
+        throws SQLException {
+        embedded.setNCharacterStream(i, reader, length);
     }
 
     public void setNClob(int i, NClob value) throws SQLException {
-        // TODO Auto-generated method stub
-        
+        embedded.setNClob(i, value);
     }
 
     public void setClob(int i, Reader reader, long length)
         throws SQLException {
-        // TODO Auto-generated method stub
-        
+        embedded.setClob(i, reader, length);
     }
 
-    public void setBlob(int i, InputStream inputStream, long length)
+    public void setBlob(int i, InputStream input, long length)
         throws SQLException {
-        // TODO Auto-generated method stub
-        
+        embedded.setBlob(i,  input, length);
     }
 
     public void setNClob(int i, Reader reader, long length)
         throws SQLException {
-        // TODO Auto-generated method stub
-        
+        embedded.setNClob(i, reader, length);
     }
 
     public void setSQLXML(int i, SQLXML xmlObject)
         throws SQLException {
-        // TODO Auto-generated method stub
-        
+        embedded.setSQLXML(i, xmlObject);
     }
 
-    public void setAsciiStream(int i, InputStream x, long length)
+    public void setAsciiStream(int i, InputStream input, long length)
         throws SQLException {
-        // TODO Auto-generated method stub
-        
+        embedded.setAsciiStream(i, input, length);
     }
 
-    public void setBinaryStream(int i, InputStream x, long length)
+    public void setBinaryStream(int i, InputStream input, long length)
         throws SQLException {
-        // TODO Auto-generated method stub
-        
+        embedded.setBinaryStream(i, input, length);
     }
 
     public void setCharacterStream(int i, Reader reader,
             long length) throws SQLException {
-        // TODO Auto-generated method stub
-        
+        embedded.setCharacterStream(i, reader, length);
     }
 
-    public void setAsciiStream(int i, InputStream x)
-        throws SQLException {
-        // TODO Auto-generated method stub
-        
+    public void setAsciiStream(int i, InputStream input) throws SQLException {
+        embedded.setAsciiStream(i,  input);
     }
 
-    public void setBinaryStream(int i, InputStream x)
-        throws SQLException {
-        // TODO Auto-generated method stub
-        
+    public void setBinaryStream(int i, InputStream input) throws SQLException {
+        embedded.setBinaryStream(i, input);
     }
 
-    public void setCharacterStream(int i, Reader reader)
-        throws SQLException {
-        // TODO Auto-generated method stub
-        
+    public void setCharacterStream(int i, Reader reader) throws SQLException {
+        embedded.setCharacterStream(i, reader);
     }
 
-    public void setNCharacterStream(int i, Reader value)
-        throws SQLException {
-        // TODO Auto-generated method stub
-        
+    public void setNCharacterStream(int i, Reader reader) throws SQLException {
+        embedded.setNCharacterStream(i, reader);
     }
 
     public void setClob(int i, Reader reader) throws SQLException {
-        // TODO Auto-generated method stub
-        
+        embedded.setClob(i,  reader);
     }
 
-    public void setBlob(int i, InputStream inputStream)
-        throws SQLException {
-        // TODO Auto-generated method stub
-        
+    public void setBlob(int i, InputStream input) throws SQLException {
+        embedded.setBlob(i, input);
     }
 
     public void setNClob(int i, Reader reader) throws SQLException {
-        // TODO Auto-generated method stub
-        
+        embedded.setNClob(i, reader);
     }
 }
