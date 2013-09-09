@@ -25,7 +25,9 @@ import java.sql.SQLFeatureNotSupportedException;
 import javax.sql.DataSource;
 
 /**
- * LogDataSource
+ * LogDataSource is a wrapper class around the JDBC DataSource. It will log
+ * some of the set values, then forwards the call to the embedded
+ * JDBC DataSource.
  * @version $Rev$
  */
 public class LogDataSource implements DataSource {
@@ -90,18 +92,15 @@ public class LogDataSource implements DataSource {
 
     public java.util.logging.Logger getParentLogger()
         throws SQLFeatureNotSupportedException {
-        // TODO Auto-generated method stub
-        return null;
+        return dataSource.getParentLogger();
     }
 
     public <T> T unwrap(Class<T> iface) throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+        return dataSource.unwrap(iface);
     }
 
     public boolean isWrapperFor(Class<?> iface) throws SQLException {
-        // TODO Auto-generated method stub
-        return false;
+        return dataSource.isWrapperFor(iface);
     }
 }
 
