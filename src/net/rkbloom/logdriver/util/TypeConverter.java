@@ -24,10 +24,10 @@ import java.util.Map;
  */
 public class TypeConverter {
 
-    private static Map types;
+    private static Map<Integer, String> types;
     
     static {
-        types = new HashMap();
+        types = new HashMap<Integer, String>();
         types.put(new Integer(Types.ARRAY), "ARRAY");
         types.put(new Integer(Types.BIGINT), "BIGINT");
         types.put(new Integer(Types.BINARY), "BINARY");
