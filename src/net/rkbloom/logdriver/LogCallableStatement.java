@@ -53,8 +53,8 @@ public class LogCallableStatement implements CallableStatement {
     private CallableStatement embedded;
     private Connection conn;
     private String sql;
-    private Map bindParams;
-    private Map outParams;
+    private Map<Object, Object> bindParams;
+    private Map<Object, Object> outParams;
     private static Logger log = Logger.getLogger(LogCallableStatement.class);
     
     public LogCallableStatement(CallableStatement cs, Connection c, String s) {
@@ -64,8 +64,8 @@ public class LogCallableStatement implements CallableStatement {
         // we want to have the bind parameters print out in order
         // otherwise it is difficult to match the parameters with
         // the question marks (?) in the query.
-        bindParams = new TreeMap();
-        outParams = new TreeMap();
+        bindParams = new TreeMap<Object, Object>();
+        outParams = new TreeMap<Object, Object>();
     }
     
     // This looks useless, but it isn't.  I have centralized the logging in
@@ -660,6 +660,7 @@ public class LogCallableStatement implements CallableStatement {
 
     /**
      * {@inheritDoc}
+     * @deprecated
      */
     public void setUnicodeStream(int i, InputStream x, int length) throws SQLException {
         embedded.setUnicodeStream(i, x, length);
