@@ -20,6 +20,8 @@ import org.apache.log4j.Logger;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.SQLFeatureNotSupportedException;
+
 import javax.sql.DataSource;
 
 /**
@@ -85,5 +87,21 @@ public class LogDataSource implements DataSource {
 		logger.debug("Setting log writer to " + out);
 		dataSource.setLogWriter(out);
 	}
+
+    public java.util.logging.Logger getParentLogger()
+        throws SQLFeatureNotSupportedException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public <T> T unwrap(Class<T> iface) throws SQLException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public boolean isWrapperFor(Class<?> iface) throws SQLException {
+        // TODO Auto-generated method stub
+        return false;
+    }
 }
 

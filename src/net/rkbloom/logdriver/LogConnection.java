@@ -16,15 +16,24 @@ package net.rkbloom.logdriver;
 
 import org.apache.log4j.Logger;
 
+import java.sql.Array;
+import java.sql.Blob;
 import java.sql.CallableStatement;
+import java.sql.Clob;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
+import java.sql.NClob;
 import java.sql.PreparedStatement;
+import java.sql.SQLClientInfoException;
 import java.sql.SQLException;
 import java.sql.SQLWarning;
+import java.sql.SQLXML;
 import java.sql.Savepoint;
 import java.sql.Statement;
+import java.sql.Struct;
 import java.util.Map;
+import java.util.Properties;
+import java.util.concurrent.Executor;
 
 /**
  * LogConnection
@@ -225,13 +234,6 @@ public class LogConnection implements Connection {
     /**
      * {@inheritDoc}
      */
-    public void setTypeMap(Map map) throws SQLException {
-        embedded.setTypeMap(map);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public String nativeSQL(String sql) throws SQLException {
         return embedded.nativeSQL(sql);
     }
@@ -325,5 +327,104 @@ public class LogConnection implements Connection {
         throws SQLException {
         return new LogPreparedStatement(embedded.prepareStatement(sql, 
                                         columnNames), this, sql);
+    }
+
+    public <T> T unwrap(Class<T> iface) throws SQLException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public boolean isWrapperFor(Class<?> iface) throws SQLException {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    public void setTypeMap(Map<String, Class<?>> map) throws SQLException {
+        embedded.setTypeMap(map);
+    }
+
+    public Clob createClob() throws SQLException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public Blob createBlob() throws SQLException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public NClob createNClob() throws SQLException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public SQLXML createSQLXML() throws SQLException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public boolean isValid(int timeout) throws SQLException {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    public void setClientInfo(String name, String value)
+        throws SQLClientInfoException {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public void setClientInfo(Properties properties)
+        throws SQLClientInfoException {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public String getClientInfo(String name) throws SQLException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public Properties getClientInfo() throws SQLException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public Array createArrayOf(String typeName, Object[] elements)
+        throws SQLException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public Struct createStruct(String typeName, Object[] attributes)
+        throws SQLException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public void setSchema(String schema) throws SQLException {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public String getSchema() throws SQLException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public void abort(Executor executor) throws SQLException {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public void setNetworkTimeout(Executor executor, int milliseconds)
+        throws SQLException {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public int getNetworkTimeout() throws SQLException {
+        // TODO Auto-generated method stub
+        return 0;
     }
 }
