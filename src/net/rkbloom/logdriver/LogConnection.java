@@ -36,7 +36,10 @@ import java.util.Properties;
 import java.util.concurrent.Executor;
 
 /**
- * LogConnection
+ * LogConnection is a wrapper class around the JDBC Connection. It will log the
+ * methods being executed, then forward the calls to the embedded
+ * JDBC Connection. It also replaces JDBC classes with equivalent Logging
+ * versions, for example, returns LogStatement for Statement.
  * @version $Rev$
  */
 public class LogConnection implements Connection {
@@ -227,7 +230,7 @@ public class LogConnection implements Connection {
     /**
      * {@inheritDoc}
      */
-    public Map getTypeMap() throws SQLException {
+    public Map<String,Class<?>> getTypeMap() throws SQLException {
         return embedded.getTypeMap();
     }
 
@@ -330,13 +333,11 @@ public class LogConnection implements Connection {
     }
 
     public <T> T unwrap(Class<T> iface) throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+        return embedded.unwrap(iface);
     }
 
     public boolean isWrapperFor(Class<?> iface) throws SQLException {
-        // TODO Auto-generated method stub
-        return false;
+        return embedded.isWrapperFor(iface);
     }
 
     public void setTypeMap(Map<String, Class<?>> map) throws SQLException {
@@ -344,87 +345,71 @@ public class LogConnection implements Connection {
     }
 
     public Clob createClob() throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+        return embedded.createClob();
     }
 
     public Blob createBlob() throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+        return embedded.createBlob();
     }
 
     public NClob createNClob() throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+        return embedded.createNClob();
     }
 
     public SQLXML createSQLXML() throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+        return embedded.createSQLXML();
     }
 
     public boolean isValid(int timeout) throws SQLException {
-        // TODO Auto-generated method stub
-        return false;
+        return embedded.isValid(timeout);
     }
 
     public void setClientInfo(String name, String value)
         throws SQLClientInfoException {
-        // TODO Auto-generated method stub
-        
+        embedded.setClientInfo(name, value);
     }
 
     public void setClientInfo(Properties properties)
         throws SQLClientInfoException {
-        // TODO Auto-generated method stub
-        
+        embedded.setClientInfo(properties);
     }
 
     public String getClientInfo(String name) throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+        return embedded.getClientInfo(name);
     }
 
     public Properties getClientInfo() throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+        return embedded.getClientInfo();
     }
 
     public Array createArrayOf(String typeName, Object[] elements)
         throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+        return embedded.createArrayOf(typeName, elements);
     }
 
     public Struct createStruct(String typeName, Object[] attributes)
         throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+        return embedded.createStruct(typeName, attributes);
     }
 
     public void setSchema(String schema) throws SQLException {
-        // TODO Auto-generated method stub
-        
+        embedded.setSchema(schema);
     }
 
     public String getSchema() throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+        return embedded.getSchema();
     }
 
     public void abort(Executor executor) throws SQLException {
-        // TODO Auto-generated method stub
-        
+        embedded.abort(executor);
     }
 
     public void setNetworkTimeout(Executor executor, int milliseconds)
         throws SQLException {
-        // TODO Auto-generated method stub
-        
+        embedded.setNetworkTimeout(executor, milliseconds);
     }
 
     public int getNetworkTimeout() throws SQLException {
-        // TODO Auto-generated method stub
-        return 0;
+        return embedded.getNetworkTimeout();
     }
 }
