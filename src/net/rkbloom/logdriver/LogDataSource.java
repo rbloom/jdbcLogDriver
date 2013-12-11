@@ -20,10 +20,14 @@ import org.apache.log4j.Logger;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.SQLFeatureNotSupportedException;
+
 import javax.sql.DataSource;
 
 /**
- * LogDataSource
+ * LogDataSource is a wrapper class around the JDBC DataSource. It will log
+ * some of the set values, then forwards the call to the embedded
+ * JDBC DataSource.
  * @version $Rev$
  */
 public class LogDataSource implements DataSource {
@@ -85,5 +89,18 @@ public class LogDataSource implements DataSource {
 		logger.debug("Setting log writer to " + out);
 		dataSource.setLogWriter(out);
 	}
+
+    public java.util.logging.Logger getParentLogger()
+        throws SQLFeatureNotSupportedException {
+        return dataSource.getParentLogger();
+    }
+
+    public <T> T unwrap(Class<T> iface) throws SQLException {
+        return dataSource.unwrap(iface);
+    }
+
+    public boolean isWrapperFor(Class<?> iface) throws SQLException {
+        return dataSource.isWrapperFor(iface);
+    }
 }
 

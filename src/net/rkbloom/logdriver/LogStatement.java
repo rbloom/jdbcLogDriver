@@ -23,7 +23,9 @@ import java.sql.SQLWarning;
 import java.sql.Statement;
 
 /**
- * LogStatement
+ * LogStatement is a wrapper class around the JDBC Statement. It will log the
+ * SQL statements being executed, then forward the calls to the embedded
+ * JDBC Statement.
  * @version $Rev$
  */
 public class LogStatement implements Statement {
@@ -310,5 +312,54 @@ public class LogStatement implements Statement {
     public ResultSet executeQuery(String sql) throws SQLException {
         log.debug("Executing Query: " + sql);
         return embedded.executeQuery(sql);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public <T> T unwrap(Class<T> iface) throws SQLException {
+        return embedded.unwrap(iface);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isWrapperFor(Class<?> iface) throws SQLException {
+        return embedded.isWrapperFor(iface);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isClosed() throws SQLException {
+        return embedded.isClosed();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setPoolable(boolean poolable) throws SQLException {
+        embedded.setPoolable(poolable);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isPoolable() throws SQLException {
+        return embedded.isPoolable();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void closeOnCompletion() throws SQLException {
+        embedded.closeOnCompletion();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isCloseOnCompletion() throws SQLException {
+        return embedded.isCloseOnCompletion();
     }
 }

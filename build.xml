@@ -112,7 +112,7 @@
 
   <target name="javadoc" description="Generate the java-doc">
     <javadoc destdir="${report.dir}/javadoc" author="true" version="true"
-             source="1.4"
+             source="1.6"
              use="true" failonerror="true" classpathref="alljars"
              breakiterator="yes" >
       <fileset dir="src" >

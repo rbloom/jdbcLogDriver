@@ -21,6 +21,7 @@ import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.DriverPropertyInfo;
 import java.sql.SQLException;
+import java.sql.SQLFeatureNotSupportedException;
 import java.util.Properties;
 
 /**
@@ -105,5 +106,11 @@ public class LogDriver implements Driver {
         catch (SQLException e) {
             log.error("Couldn't register LogDriver.", e);
         }
+    }
+
+    public java.util.logging.Logger getParentLogger()
+        throws SQLFeatureNotSupportedException {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

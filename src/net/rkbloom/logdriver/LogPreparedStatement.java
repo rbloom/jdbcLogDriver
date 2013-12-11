@@ -25,13 +25,16 @@ import java.sql.Blob;
 import java.sql.Clob;
 import java.sql.Connection;
 import java.sql.Date;
+import java.sql.NClob;
 import java.sql.ParameterMetaData;
 import java.sql.PreparedStatement;
 import java.sql.Ref;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
+import java.sql.RowId;
 import java.sql.SQLException;
 import java.sql.SQLWarning;
+import java.sql.SQLXML;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Calendar;
@@ -39,7 +42,9 @@ import java.util.TreeMap;
 import java.util.Map;
 
 /**
- * LogPreparedStatement
+ * LogPreparedStatement is a wrapper class around the JDBC PreparedStatement.
+ * It will log the SQL statements being executed, then forward the calls to the
+ * embedded JDBC PreparedStatement.
  * @version $Rev$
  */
 public class LogPreparedStatement implements PreparedStatement {
@@ -47,7 +52,7 @@ public class LogPreparedStatement implements PreparedStatement {
     private PreparedStatement embedded;
     private Connection conn;
     private String sql;
-    private Map bindParams;
+    private Map<Integer, Object> bindParams;
     private static Logger log = Logger.getLogger(LogPreparedStatement.class);
     
     LogPreparedStatement(PreparedStatement ps, Connection c, String s) {
@@ -57,7 +62,7 @@ public class LogPreparedStatement implements PreparedStatement {
         // we want to have the bind parameters print out in order
         // otherwise it is difficult to match the parameters with
         // the question marks (?) in the query.
-        bindParams = new TreeMap();
+        bindParams = new TreeMap<Integer, Object>();
     }
     
     // This looks useless, but it isn't.  I have centralized the logging in
@@ -150,137 +155,138 @@ public class LogPreparedStatement implements PreparedStatement {
     /**
      * {@inheritDoc}
      */
-    public void setByte(int parameterIndex, byte x) throws SQLException {
-        embedded.setByte(parameterIndex, x);
-        bindParams.put(new Integer(parameterIndex), new Byte(x));
+    public void setByte(int i, byte x) throws SQLException {
+        embedded.setByte(i, x);
+        bindParams.put(new Integer(i), new Byte(x));
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setDouble(int parameterIndex, double x) throws SQLException {
-        embedded.setDouble(parameterIndex, x);
-        bindParams.put(new Integer(parameterIndex), new Double(x));
+    public void setDouble(int i, double x) throws SQLException {
+        embedded.setDouble(i, x);
+        bindParams.put(new Integer(i), new Double(x));
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setFloat(int parameterIndex, float x) throws SQLException {
-        embedded.setFloat(parameterIndex, x);
-        bindParams.put(new Integer(parameterIndex), new Float(x));
+    public void setFloat(int i, float x) throws SQLException {
+        embedded.setFloat(i, x);
+        bindParams.put(new Integer(i), new Float(x));
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setInt(int parameterIndex, int x) throws SQLException {
-        embedded.setInt(parameterIndex, x);
-        bindParams.put(new Integer(parameterIndex), new Integer(x));
+    public void setInt(int i, int x) throws SQLException {
+        embedded.setInt(i, x);
+        bindParams.put(new Integer(i), new Integer(x));
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setNull(int parameterIndex, int sqlType) throws SQLException {
-        embedded.setNull(parameterIndex, sqlType);
-        bindParams.put(new Integer(parameterIndex), null);
+    public void setNull(int i, int sqlType) throws SQLException {
+        embedded.setNull(i, sqlType);
+        bindParams.put(new Integer(i), null);
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setLong(int parameterIndex, long x) throws SQLException {
-        embedded.setLong(parameterIndex, x);
-        bindParams.put(new Integer(parameterIndex), new Long(x));
+    public void setLong(int i, long x) throws SQLException {
+        embedded.setLong(i, x);
+        bindParams.put(new Integer(i), new Long(x));
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setShort(int parameterIndex, short x) throws SQLException {
-        embedded.setShort(parameterIndex, x);
-        bindParams.put(new Integer(parameterIndex), new Short(x));
+    public void setShort(int i, short x) throws SQLException {
+        embedded.setShort(i, x);
+        bindParams.put(new Integer(i), new Short(x));
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setBoolean(int parameterIndex, boolean x) throws SQLException {
-        embedded.setBoolean(parameterIndex, x);
-        bindParams.put(new Integer(parameterIndex), new Boolean(x));
+    public void setBoolean(int i, boolean x) throws SQLException {
+        embedded.setBoolean(i, x);
+        bindParams.put(new Integer(i), new Boolean(x));
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setBytes(int parameterIndex, byte[] x) throws SQLException {
-        embedded.setBytes(parameterIndex, x);
+    public void setBytes(int i, byte[] x) throws SQLException {
+        embedded.setBytes(i, x);
         // Should this be:
-        // bindParams.put(new Integer(parameterIndex), Arrays.asList(x));
-        bindParams.put(new Integer(parameterIndex), x);
+        // bindParams.put(new Integer(i), Arrays.asList(x));
+        bindParams.put(new Integer(i), x);
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setAsciiStream(int parameterIndex, InputStream x, int length)
+    public void setAsciiStream(int i, InputStream x, int length)
         throws SQLException {
-        embedded.setAsciiStream(parameterIndex, x, length);
-        bindParams.put(new Integer(parameterIndex), x);
+        embedded.setAsciiStream(i, x, length);
+        bindParams.put(new Integer(i), x);
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setBinaryStream(int parameterIndex, InputStream x, int length)
+    public void setBinaryStream(int i, InputStream x, int length)
         throws SQLException {
-        embedded.setBinaryStream(parameterIndex, x, length);
-        bindParams.put(new Integer(parameterIndex), x);
+        embedded.setBinaryStream(i, x, length);
+        bindParams.put(new Integer(i), x);
     }
 
     /**
      * {@inheritDoc}
+     * @deprecated
      */
-    public void setUnicodeStream(int parameterIndex, InputStream x, int length)
+    public void setUnicodeStream(int i, InputStream x, int length)
         throws SQLException {
-        embedded.setUnicodeStream(parameterIndex, x, length);
-        bindParams.put(new Integer(parameterIndex), x);
+        embedded.setUnicodeStream(i, x, length);
+        bindParams.put(new Integer(i), x);
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setCharacterStream(int parameterIndex, Reader reader, int length)
+    public void setCharacterStream(int i, Reader reader, int length)
         throws SQLException {
-        embedded.setCharacterStream(parameterIndex, reader, length);
-        bindParams.put(new Integer(parameterIndex), reader);
+        embedded.setCharacterStream(i, reader, length);
+        bindParams.put(new Integer(i), reader);
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setObject(int parameterIndex, Object x) throws SQLException {
-        embedded.setObject(parameterIndex, x);
-        bindParams.put(new Integer(parameterIndex), x);
+    public void setObject(int i, Object x) throws SQLException {
+        embedded.setObject(i, x);
+        bindParams.put(new Integer(i), x);
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setObject(int parameterIndex, Object x, int targetSqlType)
+    public void setObject(int i, Object x, int targetSqlType)
         throws SQLException {
-        embedded.setObject(parameterIndex, x, targetSqlType);
-        bindParams.put(new Integer(parameterIndex), x);
+        embedded.setObject(i, x, targetSqlType);
+        bindParams.put(new Integer(i), x);
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setObject(int parameterIndex, Object x, int targetSqlType,
+    public void setObject(int i, Object x, int targetSqlType,
             int scale) throws SQLException {
-        embedded.setObject(parameterIndex, x, targetSqlType, scale);
-        bindParams.put(new Integer(parameterIndex), x);
+        embedded.setObject(i, x, targetSqlType, scale);
+        bindParams.put(new Integer(i), x);
     }
 
     /**
@@ -295,26 +301,26 @@ public class LogPreparedStatement implements PreparedStatement {
     /**
      * {@inheritDoc}
      */
-    public void setString(int parameterIndex, String x) throws SQLException {
-        embedded.setString(parameterIndex, x);
-        bindParams.put(new Integer(parameterIndex), x);
+    public void setString(int i, String x) throws SQLException {
+        embedded.setString(i, x);
+        bindParams.put(new Integer(i), x);
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setBigDecimal(int parameterIndex, BigDecimal x)
+    public void setBigDecimal(int i, BigDecimal x)
         throws SQLException {
-        embedded.setBigDecimal(parameterIndex, x);
-        bindParams.put(new Integer(parameterIndex), x);
+        embedded.setBigDecimal(i, x);
+        bindParams.put(new Integer(i), x);
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setURL(int parameterIndex, URL x) throws SQLException {
-        embedded.setURL(parameterIndex, x);
-        bindParams.put(new Integer(parameterIndex), x);
+    public void setURL(int i, URL x) throws SQLException {
+        embedded.setURL(i, x);
+        bindParams.put(new Integer(i), x);
     }
 
     /**
@@ -344,9 +350,9 @@ public class LogPreparedStatement implements PreparedStatement {
     /**
      * {@inheritDoc}
      */
-    public void setDate(int parameterIndex, Date x) throws SQLException {
-        embedded.setDate(parameterIndex, x);
-        bindParams.put(new Integer(parameterIndex), x);
+    public void setDate(int i, Date x) throws SQLException {
+        embedded.setDate(i, x);
+        bindParams.put(new Integer(i), x);
     }
 
     /**
@@ -382,45 +388,45 @@ public class LogPreparedStatement implements PreparedStatement {
     /**
      * {@inheritDoc}
      */
-    public void setTime(int parameterIndex, Time x) throws SQLException {
-        embedded.setTime(parameterIndex, x);
-        bindParams.put(new Integer(parameterIndex), x);
+    public void setTime(int i, Time x) throws SQLException {
+        embedded.setTime(i, x);
+        bindParams.put(new Integer(i), x);
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setTimestamp(int parameterIndex, Timestamp x)
+    public void setTimestamp(int i, Timestamp x)
         throws SQLException {
-        embedded.setTimestamp(parameterIndex, x);
-        bindParams.put(new Integer(parameterIndex), x);
+        embedded.setTimestamp(i, x);
+        bindParams.put(new Integer(i), x);
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setDate(int parameterIndex, Date x, Calendar cal)
+    public void setDate(int i, Date x, Calendar cal)
         throws SQLException {
-        embedded.setDate(parameterIndex, x, cal);
-        bindParams.put(new Integer(parameterIndex), x);
+        embedded.setDate(i, x, cal);
+        bindParams.put(new Integer(i), x);
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setTime(int parameterIndex, Time x, Calendar cal)
+    public void setTime(int i, Time x, Calendar cal)
         throws SQLException {
-        embedded.setTime(parameterIndex, x, cal);
-        bindParams.put(new Integer(parameterIndex), x);
+        embedded.setTime(i, x, cal);
+        bindParams.put(new Integer(i), x);
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setTimestamp(int parameterIndex, Timestamp x, Calendar cal)
+    public void setTimestamp(int i, Timestamp x, Calendar cal)
         throws SQLException {
-        embedded.setTimestamp(parameterIndex, x, cal);
-        bindParams.put(new Integer(parameterIndex), x);
+        embedded.setTimestamp(i, x, cal);
+        bindParams.put(new Integer(i), x);
     }
 
     /**
@@ -694,5 +700,114 @@ public class LogPreparedStatement implements PreparedStatement {
     public ResultSet executeQuery(String sql) throws SQLException {
         logStatement(sql);
         return embedded.executeQuery(sql);
+    }
+
+    public boolean isClosed() throws SQLException {
+        return embedded.isClosed();
+    }
+
+    public void setPoolable(boolean poolable) throws SQLException {
+        embedded.setPoolable(poolable);
+    }
+
+    public boolean isPoolable() throws SQLException {
+        return embedded.isPoolable();
+    }
+
+    public void closeOnCompletion() throws SQLException {
+        embedded.closeOnCompletion();
+    }
+
+    public boolean isCloseOnCompletion() throws SQLException {
+        return embedded.isCloseOnCompletion();
+    }
+
+    public <T> T unwrap(Class<T> iface) throws SQLException {
+        return embedded.unwrap(iface);
+    }
+
+    public boolean isWrapperFor(Class<?> iface) throws SQLException {
+        return embedded.isWrapperFor(iface);
+    }
+
+    public void setRowId(int i, RowId x) throws SQLException {
+        embedded.setRowId(i, x);
+    }
+
+    public void setNString(int i, String value)
+        throws SQLException {
+        embedded.setNString(i, value);
+    }
+
+    public void setNCharacterStream(int i, Reader reader, long length)
+        throws SQLException {
+        embedded.setNCharacterStream(i, reader, length);
+    }
+
+    public void setNClob(int i, NClob value) throws SQLException {
+        embedded.setNClob(i, value);
+    }
+
+    public void setClob(int i, Reader reader, long length)
+        throws SQLException {
+        embedded.setClob(i, reader, length);
+    }
+
+    public void setBlob(int i, InputStream input, long length)
+        throws SQLException {
+        embedded.setBlob(i,  input, length);
+    }
+
+    public void setNClob(int i, Reader reader, long length)
+        throws SQLException {
+        embedded.setNClob(i, reader, length);
+    }
+
+    public void setSQLXML(int i, SQLXML xmlObject)
+        throws SQLException {
+        embedded.setSQLXML(i, xmlObject);
+    }
+
+    public void setAsciiStream(int i, InputStream input, long length)
+        throws SQLException {
+        embedded.setAsciiStream(i, input, length);
+    }
+
+    public void setBinaryStream(int i, InputStream input, long length)
+        throws SQLException {
+        embedded.setBinaryStream(i, input, length);
+    }
+
+    public void setCharacterStream(int i, Reader reader,
+            long length) throws SQLException {
+        embedded.setCharacterStream(i, reader, length);
+    }
+
+    public void setAsciiStream(int i, InputStream input) throws SQLException {
+        embedded.setAsciiStream(i,  input);
+    }
+
+    public void setBinaryStream(int i, InputStream input) throws SQLException {
+        embedded.setBinaryStream(i, input);
+    }
+
+    public void setCharacterStream(int i, Reader reader) throws SQLException {
+        embedded.setCharacterStream(i, reader);
+    }
+
+    public void setNCharacterStream(int i, Reader reader) throws SQLException {
+        embedded.setNCharacterStream(i, reader);
+    }
+
+    public void setClob(int i, Reader reader) throws SQLException {
+        embedded.setClob(i,  reader);
+    }
+
+    public void setBlob(int i, InputStream input) throws SQLException {
+        embedded.setBlob(i, input);
+    }
+
+    public void setNClob(int i, Reader reader) throws SQLException {
+        embedded.setNClob(i, reader);
     }
 }
